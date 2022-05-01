@@ -1,0 +1,117 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+func main() {
+	const InkNeeded int = 1000000
+	var input []string
+
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		txt := scanner.Text()
+		if txt == "" {
+			break
+		}
+		input = append(input, scanner.Text())
+	}
+
+	cases, _ := strconv.Atoi(input[0])
+	for tc := 0; tc < cases; tc++ {
+		cmyk1 := strings.Fields(input[1+tc*3])
+		cmyk2 := strings.Fields(input[2+tc*3])
+		cmyk3 := strings.Fields(input[3+tc*3])
+
+		c1, _ := strconv.Atoi(cmyk1[0])
+		m1, _ := strconv.Atoi(cmyk1[1])
+		y1, _ := strconv.Atoi(cmyk1[2])
+		k1, _ := strconv.Atoi(cmyk1[3])
+		c2, _ := strconv.Atoi(cmyk2[0])
+		m2, _ := strconv.Atoi(cmyk2[1])
+		y2, _ := strconv.Atoi(cmyk2[2])
+		k2, _ := strconv.Atoi(cmyk2[3])
+		c3, _ := strconv.Atoi(cmyk3[0])
+		m3, _ := strconv.Atoi(cmyk3[1])
+		y3, _ := strconv.Atoi(cmyk3[2])
+		k3, _ := strconv.Atoi(cmyk3[3])
+
+		if (c1+m1+y1+k1 < InkNeeded) || (c2+m2+y2+k2 < InkNeeded) || (c3+m3+y3+k3 < InkNeeded) {
+			fmt.Printf("Case #%d: IMPOSSIBLE\n", tc+1)
+			continue
+		}
+
+		maxC := c1
+		if c2 < maxC {
+			maxC = c2
+		}
+		if c3 < maxC {
+			maxC = c3
+		}
+		maxM := m1
+		if m2 < maxM {
+			maxM = m2
+		}
+		if m3 < maxM {
+			maxM = m3
+		}
+		maxY := y1
+		if y2 < maxY {
+			maxY = y2
+		}
+		if y3 < maxY {
+			maxY = y3
+		}
+		maxK := k1
+		if k2 < maxK {
+			maxK = k2
+		}
+		if k3 < maxK {
+			maxK = k3
+		}
+
+		if maxC+maxM+maxY+maxK < InkNeeded {
+			fmt.Printf("Case #%d: IMPOSSIBLE\n", tc+1)
+			continue
+		}
+
+		found := false
+		for c := maxC; c >= 0; c-- {
+			if found {
+				break
+			}
+			if c > InkNeeded {
+				continue
+			}
+			for m := maxM; m >= 0; m-- {
+				if found {
+					break
+				}
+				if c+m > InkNeeded {
+					continue
+				}
+				for y := maxY; y >= 0; y-- {
+					if found {
+						break
+					}
+					if c+m+y > InkNeeded {
+						continue
+					}
+
+					k := InkNeeded - c - m - y
+					fmt.Printf("Case #%d: %d %d %d %d\n", tc+1, c, m, y, k)
+					found = true
+				}
+			}
+		}
+		if found {
+			continue
+		}
+
+		fmt.Printf("Case #%d: IMPOSSIBLE\n", tc+1)
+	}
+}

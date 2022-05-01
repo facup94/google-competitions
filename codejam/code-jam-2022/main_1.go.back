@@ -1,0 +1,57 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+func main() {
+	var input []string
+
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		txt := scanner.Text()
+		if txt == "" {
+			break
+		}
+		input = append(input, scanner.Text())
+	}
+
+	cases, _ := strconv.Atoi(input[0])
+	for c := 1; c <= cases; c++ {
+		fmt.Printf("Case #%d:\n", c)
+		rc := strings.Fields(input[c])
+		rows, _ := strconv.Atoi(rc[0])
+		cols, _ := strconv.Atoi(rc[1])
+
+		fmt.Print("..")
+		for i := 0; i < cols-1; i++ {
+			fmt.Print("+-")
+		}
+		fmt.Println("+")
+		fmt.Print("..")
+		for i := 0; i < cols-1; i++ {
+			fmt.Print("|.")
+		}
+		fmt.Println("|")
+
+		for j := 0; j < rows-1; j++ {
+			for i := 0; i < cols; i++ {
+				fmt.Print("+-")
+			}
+			fmt.Println("+")
+			for i := 0; i < cols; i++ {
+				fmt.Print("|.")
+			}
+			fmt.Println("|")
+		}
+
+		for i := 0; i < cols; i++ {
+			fmt.Print("+-")
+		}
+		fmt.Println("+")
+	}
+}
